@@ -16,9 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: disorientations/rsync-deployments@master
-        env: 
-          DEPLOY_KEY: ${{secrets.DEPLOY_KEY}} 
         with:
           INPUT_USER_AND_HOST: disorie1@disorientations.org
           INPUT_DEST: /home/disorie1/public_html/
-          INPUT_RSYNC_OPTIONS: -avzr --delete --exclude '/config/database.ini' --exclude '/uploads/'
+          INPUT_RSYNC_OPTIONS: -avzr --delete --exclude /config/database.ini --exclude /uploads/
+        env: 
+          DEPLOY_KEY: ${{secrets.DEPLOY_KEY}} 
