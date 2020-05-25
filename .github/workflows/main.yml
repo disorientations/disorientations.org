@@ -12,10 +12,10 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  runs-on: ubuntu-latest
   deploy:
     steps:
-      - name: rsync deployments
-        uses: contention/rsync-deployments@v1.0.0
+      - uses: contention/rsync-deployments@v1.0.0
         env: 
           DEPLOY_KEY: ${{secrets.DEPLOY_KEY}} 
         with:
