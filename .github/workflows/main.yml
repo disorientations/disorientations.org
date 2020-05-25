@@ -12,8 +12,8 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  runs-on: ubuntu-latest
   deploy:
+    runs-on: ubuntu-latest
     steps:
       - uses: contention/rsync-deployments@v1.0.0
         env: 
