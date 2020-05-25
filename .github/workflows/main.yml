@@ -19,6 +19,6 @@ jobs:
         env: 
           DEPLOY_KEY: ${{secrets.DEPLOY_KEY}} 
         with:
-          USER_AND_HOST: disorie1@disorientations.org
-          DEST: /home/disorie1/public_html/
-          RSYNC_OPTIONS: -avzr --delete --exclude '/config/database.ini' --exclude '/uploads/'
+          INPUT_USER_AND_HOST: disorie1@disorientations.org
+          INPUT_DEST: /home/disorie1/public_html/
+          INPUT_RSYNC_OPTIONS: -avzr --delete --exclude '/config/database.ini' --exclude '/uploads/'
