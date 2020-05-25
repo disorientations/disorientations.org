@@ -15,8 +15,12 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: contention/rsync-deployments@v1.0.0
+      - uses: onclesam/rsync-deployments@patch-1
         env: 
           DEPLOY_KEY: ${{secrets.DEPLOY_KEY}} 
         with:
-          args: "-avzr --delete --exclude /config/database.ini --exclude /uploads/ disorie1@disorientations.org:/home/disorie1/public_html/"
+          USER_AND_HOST: disorie1@disorientations.org
+          DEST: /home/disorie1/public_html/
+          RSYNC_OPTIONS: -avzr --delete --exclude '/config/database.ini' --exclude '/uploads/'
+        env:
+          DEPLOY_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
