@@ -15,7 +15,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: disorientations/rsync-deployments
+      - uses: disorientations/rsync-deployments@latest
         env: 
           DEPLOY_KEY: ${{secrets.DEPLOY_KEY}} 
         with:
