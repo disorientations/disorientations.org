@@ -1,0 +1,118 @@
+<?php
+$this->headLink()->appendStylesheet($this->assetUrl('css/admin.css', 'Scripto'));
+$this->headScript()->appendFile($this->assetUrl('js/scripto.js', 'Scripto'));
+$this->headScript()->appendFile($this->assetUrl('js/admin.js', 'Scripto'));
+$this->headScript()->appendFile($this->assetUrl('js/common/watchlist.js', 'Scripto'));
+$this->htmlElement('body')->appendAttribute('class', 'scripto user watchlist browse');
+?>
+
+<?php echo $this->pageTitle($user['name'], 1, $this->translate('Scripto: User'), $this->translate('Watchlist')); ?>
+
+<?php echo $this->scripto()->adminLoginBar(); ?>
+
+<?php echo $this->scripto()->adminBreadcrumbs(); ?>
+
+<div class="browse-controls">
+    <?php echo $this->scripto()->mediawikiPagination(); ?>
+    <?php echo $this->scripto()->watchlistTimePeriodSelect(); ?>
+</div>
+
+<?php if ($watchlist): ?>
+
+<table class="tablesaw" data-tablesaw-mode="stack">
+    <thead>
+        <tr>
+            <th><?php echo $this->translate('Media #'); ?></th>
+            <th><?php echo $this->translate('Type'); ?></th>
+            <th><?php echo $this->translate('Item'); ?></th>
+            <th><?php echo $this->translate('Project'); ?></th>
+            <th><?php echo $this->translate('Revision'); ?></th>
+            <th></th>
+            <th><?php echo $this->translate('Size'); ?></th>
+            <th><?php echo $this->translate('User'); ?></th>
+            <th class="comment"><?php echo $this->translate('Comment'); ?></th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($watchlist as $page): ?>
+    <?php
+    $date = $page['timestamp']->format('G:i, j F Y');
+    $sizeDiff = $page['newlen'] - $page['oldlen'];
+    $sMedia = isset($page['scripto_media']) ? $page['scripto_media'] : null;
+    $sItem = $sMedia ? $sMedia->scriptoItem() : null;
+    $project = $sItem ? $sItem->scriptoProject() : null;
+    $isTalk = (1 === $page['ns']);
+    ?>
+        <tr>
+            <td>
+                <?php echo $sMedia
+                ? $isTalk
+                    ? $this->hyperlink(sprintf($this->scripto()->translate($project->mediaType(), 'Media #%s notes'), $sMedia->position()), $sMedia->adminUrl('talk'))
+                    : $this->hyperlink(sprintf($this->scripto()->translate($project->mediaType(), 'Media #%s'), $sMedia->position()), $sMedia->adminUrl())
+                : $this->translate('n/a'); ?>
+            </td>
+            <td><?php echo $this->scripto()->translate($project->itemType(), 'Item'); ?></td>
+            <td><?php echo $sItem ? $sItem->link($sItem->item()->displayTitle()) : $page['title']; ?></td>
+            <td><?php echo $project ? $project->link($project->title()) : $this->translate('n/a'); ?></td>
+            <td>
+                <?php echo $sMedia
+                ? $this->hyperlink($date, $this->url(
+                    $isTalk ? 'admin/scripto-talk-media-id' : 'admin/scripto-media-id',
+                    [
+                        'project-id' => $project->id(),
+                        'item-id' => $sItem->item()->id(),
+                        'media-id' => $sMedia->media()->id(),
+                        'revision-id' => $page['revid'],
+                    ]
+                ))
+                : $date; ?>
+            </td>
+            <td>
+                <?php echo $sMedia
+                ? sprintf(
+                    '(%s | %s)',
+                    $page['old_revid']
+                        ? $this->hyperlink($this->translate('diff'), $this->url(
+                            $isTalk ? 'admin/scripto-talk-revision-compare' : 'admin/scripto-revision-compare',
+                            [
+                                'project-id' => $project->id(),
+                                'item-id' => $sItem->item()->id(),
+                                'media-id' => $sMedia->media()->id(),
+                                'from-revision-id' => $page['old_revid'],
+                                'to-revision-id' => $page['revid'],
+                            ]
+                        ))
+                        : $this->translate('diff'),
+                    $this->hyperlink($this->translate('hist'), $this->url(
+                        $isTalk ? 'admin/scripto-talk-revision' : 'admin/scripto-revision',
+                        [
+                            'project-id' => $project->id(),
+                            'item-id' => $sItem->item()->id(),
+                            'media-id' => $sMedia->media()->id(),
+                        ]
+                    ))
+                )
+                : ''; ?>
+            </td>
+            <td><?php echo sprintf(
+                $this->translate('%s bytes (%s)'),
+                number_format($page['newlen']),
+                sprintf(
+                    '<span style="color: %s;">%s%s</span>',
+                    0 < $sizeDiff ? 'green' : (0 > $sizeDiff ? 'red' : 'inherit'),
+                    0 < $sizeDiff ? '+' : '',
+                    number_format($sizeDiff)
+                )
+            ); ?></td>
+            <td><?php echo $this->hyperlink($page['user'], $this->url('admin/scripto-user-contributions', ['user-id' => $page['user']])); ?></td>
+            <td><i><?php echo $page['parsedcomment']; ?></i></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<?php else: ?>
+<div class="no-resources">
+    <p><?php echo $this->translate('No watchlist pages found.'); ?></p>
+</div>
+<?php endif; ?>

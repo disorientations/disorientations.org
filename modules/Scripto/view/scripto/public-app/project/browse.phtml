@@ -1,0 +1,25 @@
+<?php
+$this->scripto()->postTitle($this->translate('Projects'));
+?>
+<div class="resource-content">
+    <div class="project resource-list">
+        <?php if ($projects): ?>
+        <?php foreach ($projects as $project): ?>
+        <div class="resource-row">
+            <?php echo $project->linkRaw($this->thumbnail($project, 'square', [
+                'title' => $this->scripto()->translate($project->mediaType(), 'Primary media'),
+                'alt' => $this->scripto()->translate($project->mediaType(), 'Primary media'),
+            ])); ?>
+            <div class="resource-meta">
+                <h4><?php echo $project->link($project->title()); ?></h4>
+                <div class="description"><?php echo $this->escapeHtml($project->description()); ?></div>
+            </div>
+        </div>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <div class="no-resources">
+            <p><?php echo $this->translate('No Scripto projects found'); ?></p>
+        </div>
+        <?php endif; ?>
+    </div>
+</div>
