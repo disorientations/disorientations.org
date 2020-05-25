@@ -17,8 +17,8 @@ jobs:
     steps:
       - uses: disorientations/rsync-deployments@master
         with:
-          USER_AND_HOST: disorie1@disorientations.org
-          DEST: '/home/disorie1/public_html/'
-          RSYNC_OPTIONS: '-avzr --delete --exclude /config/database.ini --exclude /uploads/'
+          USER_AND_HOST: github@disorientations.org
+          DEST: /home/disorie1/public_html/
+          RSYNC_OPTIONS: -avzr --delete --exclude /config/database.ini --exclude /uploads/
         env: 
           DEPLOY_KEY: ${{secrets.DEPLOY_KEY}} 
