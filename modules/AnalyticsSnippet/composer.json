@@ -1,0 +1,18 @@
+{
+    "name": "daniel-km/omeka-s-module-analytics-snippet",
+    "description": "Omeka S module to add a snippet, generally a javascript tracker, at the end of the pages.",
+    "license": " CECILL-2.1",
+    "autoload": {
+        "psr-4": {
+            "AnalyticsSnippet\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "AnalyticsSnippetTest\\": "test/AnalyticsSnippetTest/"
+        }
+    },
+    "extra": {
+        "install-name": "AnalyticsSnippet"
+    }
+}

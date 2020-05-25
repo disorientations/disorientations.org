@@ -1,0 +1,32 @@
+<?php
+$this->headScript()->appendFile($this->assetUrl('js/admin/project-form.js', 'Scripto'));
+$this->ckEditor();
+$this->htmlElement('body')->appendAttribute('class', 'scripto project add');
+$form->prepare();
+?>
+
+<?php echo $this->pageTitle($this->translate('New project'), 1, $this->translate('Scripto')); ?>
+
+<?php echo $this->sectionNav([
+    'project-config' => $this->translate('Configuration'),
+    'project-reviewers' => $this->translate('Reviewers'),
+]); ?>
+
+<?php echo $this->form()->openTag($form); ?>
+
+<div id="page-actions">
+    <?php echo $this->hyperlink('', '#', [
+        'class' => 'o-icon-private button',
+        'title' => $this->translate('Make public'),
+    ]); ?>
+    <input type="hidden" name="o:is_public" value="0">
+    <button><?php echo $this->translate('Add'); ?></button>
+</div>
+
+<div id="project-config" class="active section">
+    <?php echo $this->formCollection($form, false); ?>
+</div>
+
+<?php echo $this->partial('reviewers-form'); ?>
+
+<?php echo $this->form()->closeTag(); ?>

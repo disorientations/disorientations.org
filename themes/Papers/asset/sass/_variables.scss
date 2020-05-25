@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css?family=EB+Garamond|Spectral+SC');
+
+$heading-font-family: "Spectral SC", serif;
+$base-font-family: "EB Garamond", serif;
+$base-font-size:   18px !default;
+$base-font-weight: 400 !default;
+$small-font-size:  $base-font-size * 0.875 !default;
+$base-line-height: 1.5 !default;
+
+$spacing-unit:     30px !default;
+
+$text-color:       #111 !default;
+$background-color: #fdfdfd !default;
+$brand-color:      #2a7ae2 !default;
+
+$yellow-color:     #fc0;
+$light-blue-color: #8bb5cb;
+$blue-color:       #006ba3;
+
+
+$grey-color:       #cecece !default;
+$grey-color-light: lighten($grey-color, 40%) !default;
+$grey-color-dark:  darken($grey-color, 25%) !default;
+
+$table-text-align: left !default;
+
+// Width of the content area
+$content-width:    1100px !default;
+
+$on-palm:          600px !default;
+$on-laptop:        800px !default;

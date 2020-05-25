@@ -1,0 +1,183 @@
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+.watch-list {
+    position: relative;
+}
+
+.watch-list .success {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid green;
+    border-radius: 3px;
+    color: green;
+    z-index: 1;
+
+    &:before,
+    &:after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        bottom: calc(100% - 1px);
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 10px solid #fff;
+    }
+
+    &:after {
+        bottom: calc(100% + 1px);
+        border-bottom-color: green;
+        z-index: -1;
+    }
+}
+
+.watchlist.button {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+}
+
+.watchlist.button:after {
+    content: "\f005";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 400;
+    display: inline-block;
+}
+
+.watched.watchlist.button:after {
+    font-weight: 900;
+}
+
+.watch-list .success {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid green;
+    border-radius: 3px;
+    color: green;
+    z-index: 1;
+    width: max-content;
+
+
+    &:before,
+    &:after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 0;
+        bottom: calc(100% - 1px);
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 10px solid #fff;
+    }
+
+    &:after {
+        bottom: calc(100% + 1px);
+        border-bottom-color: green;
+        z-index: -1;
+    }
+}
+
+.compare-controls {
+    display: flex;
+    align-items: center;
+}
+
+.from-revision,
+.to-revision {
+    width: 1em;
+    margin: 0 6px;
+}
+
+#compare-table {
+  table-layout: auto;
+}
+
+#compare-table td {
+    position: relative;
+}
+
+#compare-table .diff-marker {
+    width: 0;
+    vertical-align: top;
+    text-align: center;
+    padding: 0;
+    text-indent: -9999px;
+    overflow: hidden;
+
+    & + td {
+        padding-left: 36px;
+        width: 50%;
+    }
+}
+
+#compare-table [colspan="2"]:first-child,
+#compare-table td.diff-context:nth-child(2) {
+    border-right: 1px solid #dfdfdf;
+}
+
+#compare-table col.diff-context {
+    border-right: 1px solid #dfdfdf;
+}
+
+#compare-table .diff-addedline {
+    background-color: #cdffcd;
+    color: green;
+}
+
+#compare-table .diff-deletedline {
+    color: #A91919;
+    background-color: #fcc;
+}
+
+#compare-table .diff-deletedline div:before,
+#compare-table .diff-addedline div:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 36px;
+    text-align: center;
+    line-height: 36px;
+    font-weight: bold;
+}
+
+#compare-table ins.diffchange:empty {
+    background-color: #0080004f;
+}
+
+#compare-table del.diffchange:empty {
+    background-color: #ff000061;
+}
+
+
+#compare-table .diff-addedline div:before {
+    content: "+";
+    background-color: #cdffcd;
+}
+
+#compare-table .diff-deletedline div:before {
+    content: "-";
+    background-color: #fcc;
+}
+
+#compare-table ins.diffchange:empty,
+#compare-table del.diffchange:empty {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.parsed-comment {
+    font-style: italic;
+}
+

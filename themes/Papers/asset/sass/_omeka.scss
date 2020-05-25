@@ -1,0 +1,359 @@
+// Page Content
+// ============
+
+.breadcrumbs {
+    max-width: 900px;
+    margin: 0 auto;
+    border: 0;
+    text-align: center;
+    border-bottom: 1px solid $grey-color-dark;
+    padding-bottom: (.5 * $spacing-unit);
+    margin-bottom: $spacing-unit;
+    font-size: .875 * $base-font-size;
+}
+
+.site-page-pagination {
+    text-align: center;
+    clear: both;
+}
+
+.break.opaque {
+    border-bottom: 1px solid $grey-color-dark;
+}
+
+.blocks {
+    max-width: 900px;
+    margin: auto;
+}
+
+.blocks h2 {
+    width: 100%;
+    text-align: center;
+}
+
+.page .toc-block {
+    margin: 0 (-.5 * $spacing-unit);
+}
+
+.page .toc-block .navigation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.page .toc-block ul {
+  list-style: none;
+  margin-left: 0;
+  border-left: 0;
+}
+
+.page .toc-block a {
+  padding: (.25 * $spacing-unit) 0;
+  display: block;
+  color: #000;
+}
+
+.page .toc-block ul ul a {
+  padding-left: 0;
+}
+
+.page .toc-block ul ul li {
+  border-top: 1px solid #000;
+  font-variant: normal;
+  display: flex;
+}
+
+.page .toc-block > ul > li {
+  border-top: 3px solid #000;
+  font-variant: small-caps;
+  background-color: $light-blue-color;
+  width: calc(50% - #{$spacing-unit});
+  margin: $spacing-unit (.5 * $spacing-unit);
+  padding: (.5 * $spacing-unit) $spacing-unit;
+}
+
+.page .toc-block ul ul li:before {
+  content: "\f005";
+  display: inline-block;
+  margin-right: (.5 * $spacing-unit);
+  margin-top: 14px;
+  font-family: "Font Awesome 5 Free";
+  font-size: 10px;
+  color: #000;
+}
+
+.page .item-showcase {
+  border-color: $grey-color-dark;
+  margin: (2 * $spacing-unit) 0;
+  padding: $spacing-unit 0 0;
+}
+
+.preview-block .resource-list {
+  @include resource-list;
+}
+
+.resource-list.preview + a {
+  @extend .button;
+}
+
+// Item Views
+// ==========
+
+.items.search .page-content .wrapper,
+.item.browse .page-content .wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.item.browse .resource-list {
+    @include resource-list;
+}
+
+.browse-controls {
+    align-items: center;
+}
+
+.browse-controls .sorting {
+    order: 1;
+    margin-right: (.5 * $spacing-unit);
+    width: 30%;
+    display: flex;
+        
+    select {
+      width: 40%;
+    }
+}
+    
+
+.browse-controls .advanced-search {
+    order: 2;
+}
+
+.browse-controls .pagination {
+    order: 3;
+    
+    form {
+        margin-right: (.5 * $spacing-unit);
+    }
+}
+
+.wrapper > h2:first-child {
+    text-align: center;
+}
+
+.wrapper > h2:first-child + h3 {
+    text-align: center;
+    margin-top: (-.5 * $spacing-unit);
+    font-variant: small-caps;
+}
+
+.properties {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.media-list,
+.property {
+    display: flex;
+    width: 100%;
+    padding: (.25 * $spacing-unit) 0;
+
+    &:not(:last-child) {
+        border-bottom: 1px solid $grey-color-dark;
+    }
+    
+    h4 {
+        width: 30%;
+        padding-right: $spacing-unit;
+        text-align: right;
+        margin-bottom: 0;
+        font-variant: small-caps;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    a.resource-link,
+    .values {
+        width: 70%;
+    }
+
+    .resource-link {
+        display: flex;
+        align-items: center;
+        
+        img {
+            width: 1.5 * $spacing-unit;
+            height: 1.5 * $spacing-unit;
+            margin-right: (.25 * $spacing-unit);
+        }
+        
+    }
+}
+
+.media-list {
+    margin-bottom: 2 * $spacing-unit;
+}
+
+.item.show table {
+    max-width: 900px;
+    margin: $spacing-unit auto;
+}
+
+.item.show h3 {
+    text-align: center;
+    margin: (2 * $spacing-unit) auto 0;
+}
+
+#advanced-search .value {
+    margin-bottom: (.25 * $spacing-unit) !important;
+}
+
+#advanced-search .remove-value {
+    text-indent: -9999px;
+    position: relative;
+    width: (1.5 * $spacing-unit);
+    height: (1.5 * $spacing-unit);
+    margin-left: (.25 * $spacing-unit);
+    
+    &:before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        text-indent: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+#advanced-search .removable .value:only-of-type .remove-value {
+    display: none;
+}
+
+#advanced-search .field {
+    display: flex;
+    margin-bottom: $spacing-unit;
+}
+
+#advanced-search .field-meta {
+    width: 20%;
+    padding-right: (.25 * $spacing-unit);
+}
+
+#advanced-search .field-meta .label {
+    font-size: 1.25 * $base-font-size;
+}
+
+#advanced-search .inputs {
+    width: 80%;
+    padding-left: .25 * $spacing-unit;
+}
+
+#advanced-search .field-description {
+    font-size: .875 * $base-font-size;
+}
+
+.media-embeds {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.media-embeds img,
+.media-embeds video,
+.media-embeds audio {
+  margin: $spacing-unit;
+}
+
+.media-list .resource-link {
+    margin-bottom: (.25 * $spacing-unit);
+}
+
+.linked-header {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+#linked-filter {
+  display: flex;
+  justify-content: center;
+  margin: $spacing-unit 0 0;
+}
+
+#linked-filter h4 {
+  margin: (.25 * $spacing-unit) (.5 * $spacing-unit) (.25 * $spacing-unit) 0;
+}
+
+.linked-resource-property {
+    margin-bottom: (.5 * $spacing-unit);
+    font-style: italic;
+}
+
+@media screen and (max-width:39.9375em) {
+    table th:not(:last-child), 
+    table td:not(:last-child) {
+        border-right: 0;
+    }
+    
+    .blocks .intro {
+        padding: $spacing-unit;
+    }
+
+    .home .transcribe {
+        padding: calc(50% + #{$spacing-unit}) $spacing-unit $spacing-unit;
+        
+        &:before {
+            padding: 0 100% 50% 0;
+            right: 0;
+            bottom: auto;
+        }
+    }
+    
+    .home .item-showcase {
+        flex-wrap: wrap;
+    }
+    
+    .home .item-showcase .item {
+        width: 100%;
+        display: block;
+    }
+    .home .item-showcase .item .item-thumbnail {
+        margin: 0;
+        width: 25%;
+        float: right;
+        margin: 0 0 15px 15px;
+    }
+    
+    .home .item-showcase .media-count {
+        display: inline-block;
+    }
+    
+    .toc-block > ul > li {
+        width: 100%;
+        margin: 0 (.5 * $spacing-unit) $spacing-unit;
+    }
+
+    .browse-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .browse-controls .advanced-search {
+        margin: (.5 * $spacing-unit);
+    }
+    
+    .browse-controls .pagination {
+        margin-left: 0;
+    }
+    
+    .item.browse .resource-list .item-thumbnail {
+        align-self: flex-start;
+    }
+    
+    .property h4 {
+          padding-right: (.5 * $spacing-unit);
+    }
+}

@@ -1,0 +1,193 @@
+<?php
+$this->headLink()->appendStylesheet($this->assetUrl('css/admin.css', 'Scripto'));
+$this->headScript()->appendFile($this->assetUrl('js/scripto.js', 'Scripto'));
+$this->headScript()->appendFile($this->assetUrl('js/admin.js', 'Scripto'));
+$this->htmlElement('body')->appendAttribute('class', 'scripto item show review media browse no-actions');
+?>
+
+<?php echo $this->pageTitle($sItem->item()->displayTitle(), 1, $this->scripto()->translate($project->itemType(), 'Scripto: Item'), $this->translate('Review')); ?>
+
+<?php echo $this->scripto()->adminLoginBar(); ?>
+
+<?php echo $this->scripto()->adminBreadcrumbs(); ?>
+
+<?php echo $this->sectionNav([
+    'item-media' => $this->scripto()->translate($project->mediaType(), 'Medias'),
+    'item-metadata' => $this->translate('Omeka item metadata'),
+]); ?>
+
+<div id="item-media" class="active section">
+
+<div class="browse-controls">
+    <?php echo $this->scripto()->adminSearchBox(); ?>
+    <?php echo $this->pagination(); ?>
+    <?php echo $this->sortSelector([
+        [
+            'label' => $this->translate('Position'),
+            'value' => 'position'
+        ],
+        [
+            'label' => $this->translate('Last synced'),
+            'value' => 'synced'
+        ],
+        [
+            'label' => $this->translate('Last edited'),
+            'value' => 'edited'
+        ],
+        [
+            'label' => $this->translate('Last completed'),
+            'value' => 'completed'
+        ],
+        [
+            'label' => $this->translate('Last approved'),
+            'value' => 'approved'
+        ],
+    ]); ?>
+    <?php echo $this->filterSelector([
+        [
+            'label' => $this->translate('Is edited'),
+            'value' => 'is_edited',
+        ],
+        [
+            'label' => $this->translate('Is not edited'),
+            'value' => 'is_not_edited',
+        ],
+        [
+            'label' => $this->translate('Is completed'),
+            'value' => 'is_edited',
+        ],
+        [
+            'label' => $this->translate('Is not completed'),
+            'value' => 'is_not_completed',
+        ],
+        [
+            'label' => $this->translate('Is approved'),
+            'value' => 'is_approved',
+        ],
+        [
+            'label' => $this->translate('Is not approved'),
+            'value' => 'is_not_approved',
+        ],
+        [
+            'label' => $this->translate('Is edited after approved'),
+            'value' => 'is_edited_after_approved',
+        ],
+        [
+            'label' => $this->translate('Is edited after imported'),
+            'value' => 'is_edited_after_imported',
+        ],
+        [
+            'label' => $this->translate('Is synced after imported'),
+            'value' => 'is_synced_after_imported',
+        ],
+    ]); ?>
+</div>
+
+<?php if ($sMedia): ?>
+
+<form method="post" id="batch-form" class="disable-unsaved-warning">
+
+<?php if ($sItem->userIsAllowed('view_scripto_media_batch_update')): ?>
+<div class="batch-inputs">
+    <select class="batch-actions-select" aria-label="<?php echo $this->translate('Batch actions'); ?>">
+        <option value="default"><?php echo $this->translate('Batch actions'); ?></option>
+        <option value="update-selected" disabled="true"><?php echo $this->translate('Edit selected'); ?></option>
+        <option value="update-all"><?php echo $this->translate('Edit all'); ?></option>
+    </select>
+    <div class="batch-actions">
+        <button type="button" class="default active" disabled="true"><?php echo $this->translate('Go'); ?></button>
+        <input type="submit" class="update-selected" name="update_selected" value="<?php echo $this->translate('Go'); ?>" formaction="<?php echo $this->escapeHtml($this->url(null, ['action' => 'batch-edit'], true)); ?>">
+        <input type="submit" class="update-all" name="update_all" value="<?php echo $this->translate('Go'); ?>" formaction="<?php echo $this->escapeHtml($this->url(null, ['action' => 'batch-edit-all'], true)); ?>">
+        <input type="hidden" name="query" class="batch-query" value="<?php echo $this->escapeHtml(json_encode($this->params()->fromQuery())); ?>">
+    </div>
+</div>
+<?php endif; ?>
+
+<table class="tablesaw scripto-media batch-edit" data-tablesaw-mode="stack">
+    <thead>
+        <tr>
+            <?php if ($sItem->userIsAllowed('view_scripto_media_batch_update')): ?>
+            <th class="row-select"><input type="checkbox" class="select-all" aria-label="<?php echo $this->translate('Select all'); ?>"></th>
+            <?php endif; ?>
+            <th class="row-number">#</th>
+            <th class="row-title"><?php echo $this->scripto()->translate($project->mediaType(), 'Media'); ?></th>
+            <th><?php echo $this->translate('Last edited'); ?></th>
+            <th><?php echo $this->translate('Status'); ?></th>
+            <th><?php echo $this->translate('Edit protection'); ?></th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($sMedia as $index => $sMedia): ?>
+        <tr>
+            <?php if ($sItem->userIsAllowed('view_scripto_media_batch_update')): ?>
+            <td><input type="checkbox" name="resource_ids[]" value="<?php echo $sMedia->id(); ?>" aria-label="<?php echo $this->scripto()->translate($project->mediaType(), 'Select media'); ?>"></td>
+            <?php endif; ?>
+            <td><?php echo $index + 1; ?></td>
+            <td>
+                <?php echo $sMedia->linkPretty(); ?>
+                <ul class="actions">
+                    <li><?php echo $this->hyperlink('', '#', [
+                        'data-sidebar-content-url' => $sMedia->url('show-details'),
+                        'class' => 'o-icon-more sidebar-content',
+                        'data-sidebar-selector' => '#show-details',
+                        'title' => $this->translate('Details'),
+                    ]); ?></li>
+                </ul>
+            </td>
+            <td><?php echo $this->i18n()->dateFormat($sMedia->edited()); ?></td>
+            <td><?php echo $this->translate($sMedia->status()); ?></td>
+            <td><?php echo $this->translate($sMedia->editAccess(0)['label']); ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+</form>
+
+<div class="browse-controls">
+    <?php echo $this->pagination(); ?>
+</div>
+
+<?php else: ?>
+<div class="no-resources">
+    <p>
+        <?php echo $this->scripto()->translate($project->mediaType(), 'No Scripto media found'); ?>
+        <br>
+        <?php echo $this->translate('Do you need to sync the project?'); ?>
+    </p>
+</div>
+<?php endif; ?>
+
+</div>
+
+<div id="item-metadata" class="section">
+    <?php
+    $resourceClass = $item->resourceClass();
+    $values = $item->displayValues();
+    ?>
+    <?php if ($resourceClass || $values): ?>
+    <?php if ($resourceClass): ?>
+    <div class="meta-group">
+        <h4><?php echo $this->translate('Class'); ?></h4>
+        <div class="value"><?php echo $resourceClass->label(); ?></div>
+    </div>
+    <?php endif; ?>
+    <?php echo $values; ?>
+    <?php else: ?>
+    <div class="no-resources">
+        <p><?php echo $this->translate('The Omeka item has no metadata.'); ?></p>
+    </div>
+    <?php endif; ?>
+</div>
+
+<div id="scripto-item-metadata" class="sidebar always-open">
+    <?php echo $this->partial('scripto/admin/item/show-details') ?>
+</div>
+
+<div id="show-details" class="sidebar">
+    <?php echo $this->hyperlink('', '#', [
+        'class' => 'sidebar-close o-icon-close',
+        'title' => $this->translate('Close'),
+    ]); ?>
+    <div class="sidebar-content"></div>
+</div>

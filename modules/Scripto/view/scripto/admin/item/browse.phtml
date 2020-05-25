@@ -1,0 +1,173 @@
+<?php 
+$this->headLink()->appendStylesheet($this->assetUrl('css/admin.css', 'Scripto'));
+$this->headScript()->appendFile($this->assetUrl('js/scripto.js', 'Scripto'));
+$this->headScript()->appendFile($this->assetUrl('js/admin.js', 'Scripto'));
+$this->htmlElement('body')->appendAttribute('class', 'scripto project review item browse');
+?>
+
+<?php echo $this->pageTitle($project->title(), 1, $this->translate('Scripto: Project'), $this->translate('Review')); ?>
+
+<?php
+if ($project->userIsAllowed('update')):
+?>
+<div id="page-actions">
+    <div id="page-action-menu">
+        <a href="#" class="expand button" aria-label="<?php echo $this->translate('Expand'); ?>"><?php echo $this->translate('Actions'); ?></a>
+        <ul class="collapsible">
+            <li><?php echo $project->link($this->translate('Edit project'), 'edit'); ?></li>
+            <li><a href="#" class="sidebar-content" data-sidebar-selector="#sync-project"><?php echo $this->translate('Sync project'); ?></a></li>
+            <li><a href="#" class="sidebar-content" data-sidebar-selector="#import-project"><?php echo $this->translate('Import content'); ?></a></li>
+            <li><a href="#" class="sidebar-content" data-sidebar-selector="#unimport-project"><?php echo $this->translate('Unimport content'); ?></a></li>
+        </ul>
+    </div>
+</div>
+<?php endif; ?>
+
+<?php echo $this->scripto()->adminLoginBar(); ?>
+
+<?php echo $this->scripto()->adminBreadcrumbs(); ?>
+
+<div class="browse-controls">
+    <?php echo $this->scripto()->adminSearchBox(); ?>
+    <?php echo $this->pagination(); ?>
+    <?php echo $this->sortSelector([
+        [
+            'label' => $this->translate('Date synced'),
+            'value' => 'synced'
+        ],
+        [
+            'label' => $this->translate('Last edited'),
+            'value' => 'edited'
+        ],
+    ]); ?>
+    <?php echo $this->filterSelector([
+        [
+            'label' => $this->translate('Is approved'),
+            'value' => 'is_approved'
+        ],
+        [
+            'label' => $this->translate('Is not approved'),
+            'value' => 'is_not_approved'
+        ],
+        [
+            'label' => $this->translate('Is in progress'),
+            'value' => 'is_in_progress'
+        ],
+        [
+            'label' => $this->translate('Is new'),
+            'value' => 'is_new'
+        ],
+        [
+            'label' => $this->translate('Is edited after imported'),
+            'value' => 'is_edited_after_imported',
+        ],
+    ]); ?>
+</div>
+
+<?php if ($sItems): ?>
+
+<table class="tablesaw" data-tablesaw-mode="stack">
+    <thead>
+        <tr>
+            <th><?php echo $this->scripto()->translate($project->itemType(), 'Item'); ?></th>
+            <th><?php echo $this->translate('Date synced'); ?></th>
+            <th><?php echo $this->translate('Last edited'); ?></th>
+            <th><?php echo $this->scripto()->translate($project->mediaType(), 'Media count'); ?></th>
+            <th><?php echo $this->translate('Status'); ?></th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($sItems as $sItem): ?>
+        <tr>
+            <td>
+                <?php echo $sItem->linkPretty(); ?>
+                <ul class="actions">
+                    <li><?php echo $this->hyperlink('', '#', [
+                        'data-sidebar-content-url' => $sItem->url('show-details'),
+                        'class' => 'o-icon-more sidebar-content',
+                        'data-sidebar-selector' => '#show-details',
+                        'title' => $this->translate('Details'),
+                    ]); ?></li>
+                </ul>
+            </td>
+            <td><?php echo $this->i18n()->dateFormat($sItem->synced()); ?></td>
+            <td><?php echo $this->i18n()->dateFormat($sItem->edited()); ?></td>
+            <td><?php echo number_format($sItem->mediaCount()); ?></td>
+            <td><?php echo $this->translate($sItem->status()); ?></td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+</table>
+
+<div class="browse-controls">
+    <?php echo $this->pagination(); ?>
+</div>
+
+<?php else: ?>
+<div class="no-resources">
+    <p>
+        <?php echo $this->scripto()->translate($project->itemType(), 'No Scripto items found'); ?>
+        <br>
+        <?php echo $this->translate('Do you need to sync the project? If you have recently synced, the sync job has likely not finished.'); ?>
+    </p>
+</div>
+<?php endif; ?>
+
+<div id="project-metadata" class="sidebar always-open">
+    <?php echo $this->partial('scripto/admin/project/show-details') ?>
+</div>
+
+<div id="show-details" class="sidebar">
+    <?php echo $this->hyperlink('', '#', [
+        'class' => 'sidebar-close o-icon-close',
+        'title' => $this->translate('Close'),
+    ]); ?>
+    <div class="sidebar-content"></div>
+</div>
+
+<div id="sync-project" class="sidebar">
+    <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
+    <h3><?php echo $this->translate('Sync project'); ?></h3>
+    <?php if (!$project->itemSet()): ?>
+    <p class="error"><?php echo $this->translate('This project has no item set. Set an item set to enable syncing.'); ?></p>
+    <?php endif; ?>
+    <p><?php echo $this->translate('Synchronize this project with the configured item set. Once synchronized, this project will contain every item in the item set. You should synchronize periodically, any time items are added or removed from the item set, and when item media have been added, removed, or reordered.'); ?></p>
+    <?php
+    $syncForm->setAttribute('action', $this->url('admin/scripto-project-id', ['action' => 'sync'], true));
+    echo $this->form($syncForm);
+    ?>
+</div>
+
+<div id="import-project" class="sidebar">
+    <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
+    <h3><?php echo $this->translate('Import content'); ?></h3>
+    <?php if (!$project->property()): ?>
+    <p class="error"><?php echo $this->translate('This project has no property. Set a property to enable importing.'); ?></p>
+    <?php endif; ?>
+    <p><?php echo $this->translate('Import project content into Omeka. Scripto stores content in a wiki before it is imported. Importing will copy approved content from the wiki into Omeka so that it can be viewed and searched.'); ?></p>
+    <p><?php echo sprintf(
+        $this->translate('%s: All existing values matching the configured import target, property, and language tag will be overwritten or deleted.'),
+        sprintf('<span style="color: red;">%s</span>', 'Warning')
+    ); ?></p>
+    <?php
+    $importForm->setAttribute('action', $this->url('admin/scripto-project-id', ['action' => 'import'], true));
+    echo $this->form($importForm);
+    ?>
+</div>
+
+<div id="unimport-project" class="sidebar">
+    <?php echo $this->hyperlink('', '#', ['class' => 'sidebar-close o-icon-close', 'title' => $this->translate('Close')]); ?>
+    <h3><?php echo $this->translate('Unimport content'); ?></h3>
+    <?php if (!$project->property()): ?>
+    <p class="error"><?php echo $this->translate('This project has no property. Set a property to enable unimporting.'); ?></p>
+    <?php endif; ?>
+    <p><?php echo $this->translate('Unimport project content from Omeka.'); ?></p>
+    <p><?php echo sprintf(
+        $this->translate('%s: All existing values matching the configured import target, property, and language tag will be deleted.'),
+        sprintf('<span style="color: red;">%s</span>', 'Warning')
+    ); ?></p>
+    <?php
+    $unimportForm->setAttribute('action', $this->url('admin/scripto-project-id', ['action' => 'unimport'], true));
+    echo $this->form($unimportForm);
+    ?>
+</div>

@@ -1,0 +1,26 @@
+//Typography
+
+$base-font-size: 18px;
+$base-line-height: 24px;
+$mobile-font-size: 13px;
+$mobile-line-height: 21px;
+
+$spacing-s: .25 * $base-line-height;
+$spacing-m: .5 * $base-line-height;
+$spacing-l: $base-line-height;
+
+$heading-font: "Archivo Black", sans-serif;
+$body-font: "Assistant", sans-serif;
+
+//Colors
+
+$primary-color: yellow;
+
+//Susy
+$susy: (
+  columns: 16,
+  gutters: 1/4,
+  math: fluid,
+  output: float,
+  gutter-position: inside,
+);

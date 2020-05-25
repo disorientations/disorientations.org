@@ -1,0 +1,91 @@
+<?php
+$this->scripto()->prepareSiteContext();
+$title = $this->scripto()->publicAppTitle();
+
+$this->headMeta()->setCharset('utf-8');
+$this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1');
+$this->headTitle($title);
+$this->headLink()->prependStylesheet('//fonts.googleapis.com/css?family=Source+Code+Pro|Lato:400,400italic,700,700italic');
+$this->headLink()->appendStylesheet($this->assetUrl('css/iconfonts.css', 'Omeka'));
+$this->headLink()->appendStylesheet($this->assetUrl('vendor/tablesaw/tablesaw.stackonly.css', 'Omeka'));
+$this->headLink()->appendStylesheet($this->scripto()->publicAppStylesheet());
+$this->headScript()->prependFile($this->assetUrl('vendor/jquery/jquery.min.js', 'Omeka'));
+$this->headScript()->appendFile($this->assetUrl('vendor/tablesaw/tablesaw.stackonly.jquery.js', 'Omeka'));
+$this->headScript()->appendFile($this->assetUrl('js/scripto.js', 'Scripto'));
+$this->headScript()->appendFile($this->assetUrl('js/public-app.js', 'Scripto'));
+?>
+<?php echo $this->doctype(); ?>
+<?php echo $this->htmlElement('html')->setAttribute('lang', $this->lang()); ?>
+    <head>
+        <?php echo $this->headMeta(); ?>
+        <?php echo $this->headTitle(); ?>
+        <?php echo $this->headLink(); ?>
+        <?php echo $this->headStyle(); ?>
+        <?php echo $this->headScript(); ?>
+    </head>
+    <header class="site-header" role="banner">
+        <div class="wrapper">
+            <?php echo $this->hyperlink($title, $this->url('scripto', ['action' => 'index'], true), ['class' => 'site-title']); ?>
+            <nav class="top-nav">
+                <input type="checkbox" id="nav-trigger" class="nav-trigger" aria-label="<?php echo $this->translate('Toggle menu'); ?>"/>
+                <label for="nav-trigger">
+                    <span class="menu-icon"></span>
+                </label>
+                <div class="trigger">
+                    <div class="site-nav">
+                        <?php echo $this->scripto()->publicAppProjectLink(); ?>
+                        <?php echo $this->scripto()->publicAppSiteLink(); ?>
+                        <?php echo $this->scripto()->loginBar(); ?>
+                        <?php if (!$this->scripto()->apiClient()->userIsLoggedIn()): ?>
+                        <?php echo $this->hyperlink($this->translate('Create account'), $this->url('scripto', ['action' => 'create-account'], true), ['class' => 'page-link']); ?>
+                        <?php endif; ?>
+                    </div>
+                    <?php if (isset($project)): ?>
+                    <div class="project-nav">
+                        <h2><?php echo $project->link($project->title()); ?></h2>
+                        <ul>
+                            <li><?php echo $project->link($this->translate('Project guidelines'), 'guidelines'); ?></li>
+                            <li><?php echo $project->link($this->scripto()->translate($project->itemType(), 'Browse items')); ?></li>
+                        </ul>
+                        <?php
+                        $searchAction = isset($sItem) ? $sItem->url() : $project->url();
+                        $searchQuery = $this->params()->fromQuery('search');
+                        $searchLabel = $this->escapeHtml(sprintf($this->translate('Search %s'), (isset($sItem) ? 'item media' : 'project items')));
+                        ?>
+                        <form id="scripto-search" class="wrapper" action="<?php echo $this->escapeHtml($searchAction); ?>">
+                            <input type="text" name="search" value="<?php echo $this->escapeHtml($searchQuery); ?>" aria-label="<?php echo $searchLabel; ?>" placeholder="<?php echo $searchLabel; ?>">
+                            <button type="submit"><?php echo $this->escapeHtml($this->translate('Search')); ?></button>
+                        </form>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <body>
+        <main id="content" class="page-content" aria-label="<?php echo $this->escapeHtml($this->translate('Content')); ?>">
+            <div class="wrapper">
+                <?php echo $this->messages(); ?>
+                <article class="post">
+                    <header class="post-header">
+                        <?php if ($this->scripto()->postTitle()): ?>
+                        <h1 class="post-title"><?php echo $this->scripto()->postTitle(); ?></h1>
+                        <?php endif; ?>
+                        <?php if ($this->scripto()->postSubtitle()): ?>
+                        <h2 class="post-subtitle"><?php echo $this->scripto()->postSubtitle(); ?></h2>
+                        <?php endif; ?>
+                    </header>
+                    <div class="post-content">
+                        <?php echo $this->content; ?>
+                    </div>
+                </article>
+            </div>
+        </main>
+        <footer class="site-footer h-card">
+            <div class="wrapper">
+                <h2 class="footer-heading"><?php echo $title; ?></h2>
+                <div id="back-to-top"><a href="#content"><?php echo $this->translate('Back to top'); ?></a></div>
+            </div>
+        </footer>
+    </body>
+</html>

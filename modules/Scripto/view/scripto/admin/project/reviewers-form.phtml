@@ -1,0 +1,39 @@
+<div id="project-reviewers" class="section">
+    <table id="project-reviewers-table" class="tablesaw" data-tablesaw-mode="stack" style="display: none;">
+        <thead>
+        <tr>
+            <th><?php echo $this->translate('Name'); ?></th>
+            <th><?php echo $this->translate('Email'); ?></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <?php echo $this->userSelector($this->translate('Click on a user to add them to the project.')); ?>
+</div>
+
+<?php
+$reviewers = [];
+if (isset($project)) {
+    foreach ($project->reviewers() as $reviewer) {
+        $reviewers[] = $reviewer->user();
+    }
+}
+$deleteIcon = $this->hyperlink('', '#', ['class' => 'o-icon-delete', 'title' => $this->translate('Delete')]);
+$restoreIcon = $this->hyperlink('', '#', ['class' => 'o-icon-undo', 'style' => 'display: none;', 'title' => $this->translate('Restore')]);
+$template = <<<TEMPLATE
+<tr>
+    <td class="user-name"></td>
+    <td class="user-email"></td>
+    <td>
+        <ul class="actions">
+            <li>$deleteIcon</li>
+            <li>$restoreIcon</li>
+        </ul>
+        <input class="user-id" type="hidden" name="o-module-scripto:reviewer[][o:user][o:id]" value="">
+    </td>
+</tr>
+TEMPLATE
+?>
+<span id="reviewers" data-reviewers="<?php echo $this->escapeHtml(json_encode($reviewers, true)); ?>"></span>
+<span id="reviewer-row-template" data-template="<?php echo $this->escapeHtml($template); ?>"></span>
