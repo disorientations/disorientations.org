@@ -1,4 +1,7 @@
 <?php
+
+$dev = getenv('APP_ENV') === 'local';
+
 return [
     'logger' => [
         'log' => false,
@@ -33,7 +36,7 @@ return [
     'file_store' => [
         'local' => [
             'base_path' => null, // Or the full path on the server if needed.
-            'base_uri' => 'https://disorientations.org/files',
+            'base_uri' => $dev ? 'http://localhost:8080/files' : 'https://disorientations.org/files',
         ],
     ],
 ];

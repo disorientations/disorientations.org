@@ -1,0 +1,29 @@
+version: "3.7"
+
+services:
+
+  apache:
+    container_name: omeka-apache
+    build:
+      context: ./docker/apache
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/usr/local/apache2/htdocs
+    user: www-data
+
+  php:
+    container_name: omeka-php
+    build:
+      context: ./docker/php
+    volumes:
+      - .:/var/www/html
+    environment:
+      APP_ENV: "local"
+
+  mysql:
+    container_name: omeka-mysql
+    build:
+      context: ./docker/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"

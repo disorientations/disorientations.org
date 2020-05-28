@@ -1,0 +1,4 @@
+user = "root"
+password = ""
+dbname = "omekas"
+host = "mysql"
