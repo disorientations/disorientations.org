@@ -1,0 +1,96 @@
+<?php
+$translate = $this->plugin('translate');
+$escape = $this->plugin('escapeHtml');
+$this->headScript()->appendFile($this->assetUrl('js/browse.js'));
+$this->htmlElement('body')->appendAttribute('class', 'item resource browse');
+
+$query = $this->params()->fromQuery();
+$itemSetShow = isset($itemSet);
+if ($itemSetShow):
+    $this->htmlElement('body')->appendAttribute('class', 'item-set');
+    $query['item_set_id'] = $itemSet->id();
+endif;
+
+$layoutSetting = $this->themeSetting('browse_layout');
+$gridState = ($layoutSetting == 'togglegrid') ? 'disabled' : '';
+$listState = ($layoutSetting == 'togglelist') ? 'disabled': '';
+$isGrid = (!isset($layoutSetting) || strpos($layoutSetting, 'grid') !== false) ? true : false;
+$headingTerm = $this->siteSetting('browse_heading_property_term');
+$bodyTerm = $this->siteSetting('browse_body_property_term');
+
+$sortHeadings = [
+    [
+        'label' => $translate('Title'),
+        'value' => 'dcterms:title'
+    ],
+    [
+        'label' => $translate('Identifier'),
+        'value' => 'dcterms:identifier'
+    ],
+    [
+        'label' => $translate('Class'),
+        'value' => 'resource_class_label'
+    ],
+    [
+        'label' => $translate('Created'),
+        'value' => 'created'
+    ],
+];
+?>
+
+<?php if ($itemSetShow): ?>
+    <?php echo $this->pageTitle($itemSet->displayTitle(), 2); ?>
+    <h3><?php echo $translate('Item set'); ?></h3>
+    <div class="metadata">
+        <?php echo $itemSet->displayValues(); ?>
+    </div>
+    <div class="item-set-items">
+    <?php echo '<h3>' . $escape($translate('Items')) . '</h3>'; ?>
+<?php else: ?>
+    <?php echo $this->pageTitle($translate('Items'), 2); ?>
+<?php endif; ?>
+
+<?php echo $this->searchFilters(); ?>
+<div class="browse-control-mobile">
+<button type="button" class="browse-toggle closed">Tools</button>
+</div>
+<div class="browse-controls closed">
+    <?php echo $this->pagination(); ?>
+    <?php if (strpos($layoutSetting, 'toggle') !== false): ?>
+    <div class="layout-toggle">
+        <button type="button" aria-label="<?php echo $translate('Grid'); ?>" class="grid o-icon-grid" <?php echo $gridState; ?>></button>
+        <button type="button" aria-label="<?php echo $translate('List'); ?>" class="list o-icon-list" <?php echo $listState; ?>></button>        
+    </div>
+    <?php endif; ?>
+    <?php echo $this->hyperlink($translate('Advanced search'), $this->url('site/resource', ['controller' => 'item', 'action' => 'search'], ['query' => $query], true), ['class' => 'advanced-search']); ?>
+    <?php echo $this->sortSelector($sortHeadings); ?>
+</div>
+
+<?php $this->trigger('view.browse.before'); ?>
+<ul class="resources <?php echo ($isGrid) ? 'resource-grid' : 'resource-list'; ?>">
+<?php
+foreach ($items as $item):
+    $heading = $headingTerm ? $item->value($headingTerm, ['default' => $translate('[Untitled]')]) : $item->displayTitle();
+    $body = $bodyTerm ? $item->value($bodyTerm) : $item->displayDescription();
+?>  
+    <li class="item resource <?php echo ($isGrid) ? '' : 'media-object'; ?>">
+        <?php if ($thumbnail = $this->thumbnail($item, 'medium')): ?>
+        <div class="resource-image <?php echo ($isGrid) ? '' : 'media-object-section'; ?>">
+            <?php echo $item->linkRaw($thumbnail, null, ['class' => 'thumbnail']); ?>
+        </div>
+        <?php endif; ?>
+        <div class="resource-meta <?php echo ($isGrid) ? '' : 'media-object-section'; ?>">
+            <h4><?php echo $item->link($heading); ?></h4>
+            <?php if ($body): ?>
+            <div class="description"><?php echo $body; ?></div>
+            <?php endif; ?>
+        </div>
+    </li>
+<?php endforeach; ?>
+</ul>
+<?php echo ($itemSetShow) ? '</div>' : ''; ?>
+<?php $this->trigger('view.browse.after'); ?>
+
+<div class="browse-controls">
+    <?php echo $this->pagination(); ?>
+</div>
