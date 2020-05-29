@@ -16,6 +16,9 @@ docker-compose up -d
 
 # Create the MySQL database
 docker-compose exec mysql mysql -e 'create database omekas'
+
+# Create the database configuration
+cp config/database.ini.dist config/database.ini
 ```
 
 Then point your browser here to do [initial
