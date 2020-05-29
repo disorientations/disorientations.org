@@ -14,6 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - uses: pxgamer/composer-action@v2.1.0
+        with:
+          command: install --no-dev --ignore-platform-reqs --no-interaction --no-suggest --no-progress --optimize-autoloader --prefer-dist
       - uses: disorientations/rsync-deployments@master
         with:
           USER_AND_HOST: disorie1@disorientations.org
