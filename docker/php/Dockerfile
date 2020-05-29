@@ -1,6 +1,6 @@
 FROM php:7.2.30-fpm-alpine
 
-RUN apk add autoconf pkgconf build-base
+RUN apk add autoconf pkgconf build-base poppler-utils
 
 RUN apk add imagemagick-dev \
     && pecl install imagick \
