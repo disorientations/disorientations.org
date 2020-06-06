@@ -2,4 +2,4 @@ files/
 config/database.ini
 error_log
 dump.sql
-vendor
+/vendor
