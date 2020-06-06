@@ -19,6 +19,9 @@ docker-compose exec mysql mysql -e 'create database omekas'
 
 # Create the database configuration
 cp config/database.ini.dist config/database.ini
+
+# Install dependencies via Composer
+docker-compose exec php composer install
 ```
 
 Then point your browser here to do [initial
